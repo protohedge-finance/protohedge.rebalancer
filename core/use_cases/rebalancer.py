@@ -17,7 +17,7 @@ class Rebalancer:
 		equation_solver = EquationsSolver(position_managers)
 		equation_result = equation_solver.calculate_equations()
 		print("Equation result was {}".format(equation_result))
-		tx = self.rebalance_executor.execute_rebalance(self.config.vault_address, equation_result, position_managers)
+		tx = self.rebalance_executor.execute_rebalance(equation_result, position_managers)
 		print("Successfully rebalanced!")
 		print("tx: {}".format(tx))
 		

@@ -8,27 +8,28 @@ from core.use_cases.equation import Equation
 
 class EquationsSolver:
 	def __init__(self, position_managers: list[PositionManager]):
-		self.position_managers = position_managers
+		self.position_managers: list[PositionManager] = position_managers
+		names = list(map(lambda p: p.name, self.position_managers))
+		self.symbols = sympy.symbols(" ".join(names)) 
+		
 
 	def calculate_equations(self):
 		equation_data = self.create_equation_data()
-		self.symbols = sympy.symbols(" ".join(self.names)) 
-		self.names = list(map(lambda p: p.name))
 		equations: list[sympy.Eq] = []
 
-		for token in self.equation_data:
-			if len(self.equation_data[token][PositionType.Long]) == 0 or len(self.equation_data[token][PositionType.Short]) == 0:
+		for token in equation_data:
+			if equation_data[token].has_no_positions_for_type(PositionType.Long) or equation_data[token].has_no_positions_for_type(PositionType.Short) == 0:
 				continue
 			
-			longs = equation_data[token][PositionType.Long]
-			shorts = equation_data[token][PositionType.Long]
-			long_equation = Equation(longs, self.symbols).create()
-			short_equation = Equation(shorts, self.symbols).create()
+			longs = equation_data[token].get_positions(PositionType.Long)
+			shorts = equation_data[token].get_positions(PositionType.Short)
+			long_equation = Equation().create(longs, self.symbols)
+			short_equation = Equation().create(shorts, self.symbols)
 
 			equations.append(sympy.Eq(long_equation, short_equation))
 
-		equations.append(self.create_liquidity_equation())
-		return self.execute_equations() 
+		equations.append(self.create_liquidity_equation(self.symbols))
+		return self.execute_equations(equations) 
 
 	def create_equation_data(self) -> dict[str, EquationPositions]:
 		equation_data = {}
@@ -39,17 +40,17 @@ class EquationsSolver:
 		return equation_data
 
 	def process_allocations(self, position_manager: list[PositionManager], index: int, equation_data) -> dict[str, EquationPositions]:
-		for allocation in position_manager.allocations:
-			if allocation.symbol not in self.equation_data:
-				self.equation_data[allocation.symbol] = EquationPositions()
+		for allocation in position_manager.token_allocation:
+			if allocation.symbol not in equation_data:
+				equation_data[allocation.symbol] = EquationPositions()
 
 			equation_allocation = EquationAllocation(position_manager, allocation, index)
-			self.equation_data[allocation.symbol].add_position(allocation.position_type, equation_allocation)
+			equation_data[allocation.symbol].add_position(allocation.position_type, equation_allocation)
 
 		return equation_data
 
 
-	def create_liquidity_equation(self):
+	def create_liquidity_equation(self, position_managers: list[PositionManager]):
 		liquidity_equation = 0
 		for (index, position_manager) in enumerate(self.position_managers):
 			liquidity_equation += (position_manager.price * self.symbols[index])

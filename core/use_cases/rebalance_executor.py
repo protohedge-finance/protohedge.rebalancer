@@ -1,4 +1,5 @@
 import json
+import jsonpickle
 from adapters.smart_contracts.dto.rebalance_dto import RebalanceRequestDto
 from adapters.smart_contracts.repositories.user_repository import UserRepository
 from adapters.smart_contracts.repositories.vault_repository import VaultRepository
@@ -17,7 +18,8 @@ class RebalanceExecutor():
 
 		for (index, position_manager) in enumerate(position_managers):
 			usdc_amount = self.calculate_usdc_amount(equation_result, position_manager, index)
-			request_payload.append(RebalanceRequestDto(position_manager, usdc_amount))	
+			rebalance_request = jsonpickle.encode(RebalanceRequestDto(position_manager, usdc_amount))
+			request_payload.append(rebalance_request)	
 
 		nonce = self.user_repository.get_transaction_count(self.config.user_address)
 		tx = self.vault_repository.rebalance(self.config.vault_address, request_payload, nonce)

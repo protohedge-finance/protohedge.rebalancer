@@ -5,4 +5,4 @@ def to_exposure_model(exposure_dto) -> Exposure:
 	return Exposure(amount, token, symbol)
 
 def to_exposure_models(exposure_dtos) -> list[Exposure]:
-	return list(map(lambda d: to_exposure_model(d)))
+	return list(map(lambda d: to_exposure_model(d), exposure_dtos))

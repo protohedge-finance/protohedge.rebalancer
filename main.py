@@ -7,6 +7,8 @@ from adapters.smart_contracts.repositories.user_repository import UserRepository
 from adapters.smart_contracts.repositories.vault_repository import VaultRepository 
 from adapters.smart_contracts.repositories.position_manager_repository import PositionManagerRepository
 
+load_dotenv()
+
 def rebalance():
     w3 = web3.Web3(web3.HTTPProvider("https://arb1.arbitrum.io/rpc"))
     vault_repository = VaultRepository(w3)

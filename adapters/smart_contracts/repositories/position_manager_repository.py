@@ -10,10 +10,15 @@ class PositionManagerRepository:
 
 	def get_position_manager(self, address: str) -> PositionManager:
 		position_manager_contract = self.w3.eth.contract(address=address, abi=position_manager_abi)
-		print("address is")
-		print(address)
-		position_manager_dto = position_manager_contract.functions.stats().call()
-		return to_position_manager_model(position_manager_dto)	
+		name = position_manager_contract.functions.name().call()
+		position_worth = position_manager_contract.functions.positionWorth().call()
+		cost_basis = position_manager_contract.functions.costBasis().call()
+		pnl = position_manager_contract.functions.pnl().call()
+		exposures = position_manager_contract.functions.exposures().call()
+		allocation = position_manager_contract.functions.allocation().call()
+		price = position_manager_contract.functions.price().call()
+
+		return to_position_manager_model(name, address, position_worth, cost_basis, pnl, exposures, allocation, price)	
 
 
 	def get_position_managers(self, addresses: list[str]) -> list[PositionManager]:

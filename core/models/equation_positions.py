@@ -11,4 +11,11 @@ class EquationPositions:
 			self.long.append(equation_allocation)
 		else:
 			self.short.append(equation_allocation)
+
+	def has_no_positions_for_type(self, position_type: PositionType):
+		positions = self.long if position_type == PositionType.Long else self.short
+		return len(positions) == 0
+
+	def get_positions(self, position_type: PositionType):
+		return self.long if position_type == PositionType.Long else self.short
 	
