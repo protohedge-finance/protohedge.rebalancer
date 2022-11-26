@@ -18,7 +18,7 @@ class EquationsSolver:
 		equations: list[sympy.Eq] = []
 
 		for token in equation_data:
-			if equation_data[token].has_no_positions_for_type(PositionType.Long) or equation_data[token].has_no_positions_for_type(PositionType.Short) == 0:
+			if equation_data[token].has_no_positions_for_type(PositionType.Long) or equation_data[token].has_no_positions_for_type(PositionType.Short):
 				continue
 			
 			longs = equation_data[token].get_positions(PositionType.Long)

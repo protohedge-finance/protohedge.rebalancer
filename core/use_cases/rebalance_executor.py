@@ -14,17 +14,17 @@ class RebalanceExecutor():
 		self.vault_repository: VaultRepository = vault_repository
 
 	def execute_rebalance(self, equation_result, position_managers: list[PositionManager]):
+		print(equation_result)
 		request_payload = []
 
 		for (index, position_manager) in enumerate(position_managers):
 			usdc_amount = self.calculate_usdc_amount(equation_result, position_manager, index)
-			rebalance_request = jsonpickle.encode(RebalanceRequestDto(position_manager, usdc_amount))
-			request_payload.append(rebalance_request)	
+			request_payload.append({"positionManager": position_manager.address, "usdcAmountToHave": usdc_amount})	
 
 		nonce = self.user_repository.get_transaction_count(self.config.user_address)
 		tx = self.vault_repository.rebalance(self.config.vault_address, request_payload, nonce)
 		print(tx)
 
 	def calculate_usdc_amount(self, equation_result, position_manager: PositionManager, index: int) -> int:
-		return equation_result[index] * position_manager.price
+		return int(equation_result[index]) * position_manager.price
 	

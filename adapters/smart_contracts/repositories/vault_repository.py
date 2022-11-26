@@ -17,7 +17,7 @@ class VaultRepository:
 	
 	def rebalance(self, vaultAddress: str, request_payload: list[RebalanceRequestDto], nonce: int):
 		vault_contract = self.w3.eth.contract(address=vaultAddress, abi=vault_abi)
-		tx = vault_contract.functions.rebalance(json.dumps(request_payload)).build_transaction({"nonce": nonce})
+		tx = vault_contract.functions.rebalance(request_payload).build_transaction({"nonce": nonce})
 		signed = self.w3.eth.account.sign_transaction(tx, private_key=os.getenv("PERSONAL_PRIVATE_KEY"))
 		self.w3.eth.send_raw_transaction(signed.rawTransaction)
 		return tx

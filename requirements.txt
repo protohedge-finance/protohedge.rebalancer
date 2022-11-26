@@ -1,2 +1,4 @@
+jsonpickle==2.2.0
+python-dotenv==0.21.0
 sympy==1.11.1
 web3==5.31.1

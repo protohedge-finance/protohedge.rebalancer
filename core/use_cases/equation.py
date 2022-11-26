@@ -8,8 +8,3 @@ class Equation:
 			equation += alloc.position_manager.price * symbols[alloc.index] * alloc.allocation.leverage * alloc.allocation.percent
 
 		return equation
-		
-		
-		
-		
-

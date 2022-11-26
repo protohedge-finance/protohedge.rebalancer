@@ -17,5 +17,7 @@ class EquationPositions:
 		return len(positions) == 0
 
 	def get_positions(self, position_type: PositionType):
-		return self.long if position_type == PositionType.Long else self.short
+		if position_type == PositionType.Long:
+			return self.long
+		return self.short
 	
