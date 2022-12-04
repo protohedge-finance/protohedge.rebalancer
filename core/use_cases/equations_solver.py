@@ -29,6 +29,8 @@ class EquationsSolver:
 			equations.append(sympy.Eq(long_equation, short_equation))
 
 		equations.append(self.create_liquidity_equation(self.symbols))
+		print("Equations are")
+		print(equations)
 		return self.execute_equations(equations) 
 
 	def create_equation_data(self) -> dict[str, EquationPositions]:

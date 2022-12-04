@@ -21,6 +21,8 @@ class RebalanceExecutor():
 			usdc_amount = self.calculate_usdc_amount(equation_result, position_manager, index)
 			request_payload.append({"positionManager": position_manager.address, "usdcAmountToHave": usdc_amount})	
 
+		print("request payload:")
+		print(request_payload)
 		nonce = self.user_repository.get_transaction_count(self.config.user_address)
 		tx = self.vault_repository.rebalance(self.config.vault_address, request_payload, nonce)
 		print(tx)

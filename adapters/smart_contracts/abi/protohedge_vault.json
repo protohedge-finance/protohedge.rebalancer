@@ -308,14 +308,14 @@
           {
             "components": [
               {
-                "internalType": "string",
-                "name": "name",
-                "type": "string"
-              },
-              {
                 "internalType": "address",
                 "name": "positionManagerAddress",
                 "type": "address"
+              },
+              {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
               },
               {
                 "internalType": "uint256",
@@ -380,10 +380,15 @@
                     "internalType": "enum PositionType",
                     "name": "positionType",
                     "type": "uint8"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "collateralRatio",
+                    "type": "uint256"
                   }
                 ],
                 "internalType": "struct TokenAllocation[]",
-                "name": "tokenAllocation",
+                "name": "tokenAllocations",
                 "type": "tuple[]"
               },
               {
