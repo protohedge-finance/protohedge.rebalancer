@@ -11,10 +11,11 @@ class Rebalancer:
 		self.position_manager_repository: PositionManagerRepository = position_manager_repository
 		self.rebalance_executor: RebalanceExecutor = rebalance_executor
 	def run(self):
-		position_manager_addresses = self.vault_repository.get_position_manager_addresses("0x519676f17927175982CD64aEa6c026Bb9CdB67f5")
+		vault = self.vault_repository.get_vault(self.config.vault_address)
+		position_manager_addresses = self.vault_repository.get_position_manager_addresses(self.config.vault_address)
 		position_managers = self.position_manager_repository.get_position_managers(position_manager_addresses)
 
-		equation_solver = EquationsSolver(position_managers)
+		equation_solver = EquationsSolver(vault, position_managers)
 		equation_result = equation_solver.calculate_equations()
 		print("Equation result was {}".format(equation_result))
 		tx = self.rebalance_executor.execute_rebalance(equation_result, position_managers)

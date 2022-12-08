@@ -3,14 +3,17 @@ from core.models.position_type import PositionType
 from core.models.position_manager import PositionManager
 from core.models.equation_allocation import EquationAllocation
 from core.models.equation_positions import EquationPositions
+from core.models.vault import Vault
 from core.use_cases.equation import Equation
-
+from core.constants import BASIS_POINTS_DIVISOR, USDC_MULTIPLIER
 
 class EquationsSolver:
-	def __init__(self, position_managers: list[PositionManager]):
+	def __init__(self, vault: Vault, position_managers: list[PositionManager]):
+		self.vault: Vault = vault
 		self.position_managers: list[PositionManager] = position_managers
 		names = list(map(lambda p: p.name, self.position_managers))
-		self.symbols = sympy.symbols(" ".join(names)) 
+		self.symbols = sympy.symbols(" ".join(names))
+		print(self.symbols)
 		
 
 	def calculate_equations(self):
@@ -28,7 +31,7 @@ class EquationsSolver:
 
 			equations.append(sympy.Eq(long_equation, short_equation))
 
-		equations.append(self.create_liquidity_equation(self.symbols))
+		equations.append(self.create_liquidity_equation())
 		print("Equations are")
 		print(equations)
 		return self.execute_equations(equations) 
@@ -52,12 +55,13 @@ class EquationsSolver:
 		return equation_data
 
 
-	def create_liquidity_equation(self, position_managers: list[PositionManager]):
+	def create_liquidity_equation(self):
 		liquidity_equation = 0
 		for (index, position_manager) in enumerate(self.position_managers):
-			liquidity_equation += (position_manager.price * self.symbols[index])
+			liquidity_equation += position_manager.price * self.symbols[index] * position_manager.collateral_ratio / BASIS_POINTS_DIVISOR
 
-		return sympy.Eq(liquidity_equation, 1000)
+
+		return sympy.Eq(liquidity_equation, self.vault.amount_to_rebalance * USDC_MULTIPLIER)
 
 	def execute_equations(self, equations: list[sympy.Eq]):
 		try:

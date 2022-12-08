@@ -13,7 +13,7 @@ def rebalance(request):
 
     config = Config()
     w3 = web3.Web3(web3.HTTPProvider(config.rpc_url))
-    vault_repository = VaultRepository(w3)
+    vault_repository = VaultRepository(w3, config)
     position_manager_repository = PositionManagerRepository(w3)
     user_repository = UserRepository(w3)
 

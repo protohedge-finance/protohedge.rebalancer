@@ -6,4 +6,3 @@ class Config:
 		self.private_key: str = os.getenv("PRIVATE_KEY")
 		self.user_address: str = os.getenv("USER_ADDRESS")
 		self.rpc_url: str = os.getenv("RPC_URL")
-		print(os.getenv("USER_ADDRESS"))

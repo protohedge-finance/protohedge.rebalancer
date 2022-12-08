@@ -5,6 +5,7 @@ from adapters.smart_contracts.repositories.user_repository import UserRepository
 from adapters.smart_contracts.repositories.vault_repository import VaultRepository
 from core.models.position_manager import PositionManager
 from config import Config
+from core.constants import USDC_MULTIPLIER
 
 class RebalanceExecutor():
 	def __init__(self, config: Config, w3, user_repository: UserRepository, vault_repository: VaultRepository):
@@ -14,7 +15,6 @@ class RebalanceExecutor():
 		self.vault_repository: VaultRepository = vault_repository
 
 	def execute_rebalance(self, equation_result, position_managers: list[PositionManager]):
-		print(equation_result)
 		request_payload = []
 
 		for (index, position_manager) in enumerate(position_managers):
@@ -28,5 +28,5 @@ class RebalanceExecutor():
 		print(tx)
 
 	def calculate_usdc_amount(self, equation_result, position_manager: PositionManager, index: int) -> int:
-		return int(equation_result[index]) * position_manager.price
+		return int(equation_result[index] * position_manager.price / USDC_MULTIPLIER)
 	

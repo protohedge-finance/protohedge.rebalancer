@@ -1,50 +1,5 @@
 [
   {
-    "inputs": [],
-    "name": "allocation",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "percentage",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "tokenAddress",
-            "type": "address"
-          },
-          {
-            "internalType": "string",
-            "name": "symbol",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "leverage",
-            "type": "uint256"
-          },
-          {
-            "internalType": "enum PositionType",
-            "name": "positionType",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint256",
-            "name": "collateralRatio",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct TokenAllocation[]",
-        "name": "",
-        "type": "tuple[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -80,16 +35,51 @@
             "internalType": "enum PositionType",
             "name": "positionType",
             "type": "uint8"
-          },
-          {
-            "internalType": "uint256",
-            "name": "collateralRatio",
-            "type": "uint256"
           }
         ],
         "internalType": "struct TokenAllocation",
         "name": "",
         "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "allocations",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "percentage",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "tokenAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "leverage",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum PositionType",
+            "name": "positionType",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct TokenAllocation[]",
+        "name": "",
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",
@@ -122,6 +112,19 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "collateralRatio",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -378,11 +381,6 @@
                 "internalType": "enum PositionType",
                 "name": "positionType",
                 "type": "uint8"
-              },
-              {
-                "internalType": "uint256",
-                "name": "collateralRatio",
-                "type": "uint256"
               }
             ],
             "internalType": "struct TokenAllocation[]",
@@ -408,4 +406,4 @@
     "stateMutability": "view",
     "type": "function"
   }
-]
+] 
