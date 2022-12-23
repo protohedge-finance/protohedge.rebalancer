@@ -8,7 +8,7 @@ from adapters.smart_contracts.repositories.vault_repository import VaultReposito
 from adapters.smart_contracts.repositories.position_manager_repository import PositionManagerRepository
 
 
-def rebalance(request):
+def rebalance(event, context):
     load_dotenv()
 
     config = Config()
