@@ -1,6 +1,6 @@
 from rebalance import rebalance
 
 def main():
-    rebalance(None)
+    rebalance(None, None)
 
 main()
