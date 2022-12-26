@@ -1,3 +1,4 @@
+from adapters.smart_contracts.repositories.stats_repository import StatsRepository
 from config import Config
 from adapters.smart_contracts.repositories.vault_repository import VaultRepository
 from adapters.smart_contracts.repositories.position_manager_repository import PositionManagerRepository
@@ -7,10 +8,11 @@ from core.use_cases.equations_solver import EquationsSolver
 from core.use_cases.rebalance_executor import RebalanceExecutor
 
 class Rebalancer:
-	def __init__(self, config: Config, vault_repository: VaultRepository, position_manager_repository: PositionManagerRepository, rebalance_executor: RebalanceExecutor):
+	def __init__(self, config: Config, vault_repository: VaultRepository, position_manager_repository: PositionManagerRepository, rebalance_executor: RebalanceExecutor, stats_repository: StatsRepository):
 		self.config: Config = config
 		self.vault_repository: VaultRepository = vault_repository
 		self.position_manager_repository: PositionManagerRepository = position_manager_repository
+		self.stats_repository: StatsRepository = stats_repository
 		self.rebalance_executor: RebalanceExecutor = rebalance_executor
 	def run(self):
 		vault = self.vault_repository.get_vault(self.config.vault_address)
@@ -28,11 +30,14 @@ class Rebalancer:
 		print(should_rebalance)
 
 		if not should_rebalance:
-			print("Rebalance did not happen. Error message: {}".format(error_message))
+			outcome = "Rebalance did not happen. Error message: {}".format(error_message)
+			self.stats_repository.add_rebalance_outcome(outcome)			
 			return
-		
+
 		print("Equation result was {}".format(equation_result))
 		tx = self.rebalance_executor.execute_rebalance(rebalance_data)
-		print("Successfully rebalanced!")
+		outcome = "Successfully rebalanced!"
+		print(outcome)
+		self.stats_repository.add_rebalance_outcome(outcome)
 		print("tx: {}".format(tx))
 
