@@ -1,6 +1,8 @@
 from config import Config
 from adapters.smart_contracts.repositories.vault_repository import VaultRepository
-from adapters.smart_contracts.repositories.position_manager_repository import PositionManagerRepository 
+from adapters.smart_contracts.repositories.position_manager_repository import PositionManagerRepository
+from core.models.rebalance_queue_data import RebalanceQueueData
+from core.models.vault import Vault 
 from core.use_cases.equations_solver import EquationsSolver
 from core.use_cases.rebalance_executor import RebalanceExecutor
 
@@ -14,12 +16,23 @@ class Rebalancer:
 		vault = self.vault_repository.get_vault(self.config.vault_address)
 		position_manager_addresses = self.vault_repository.get_position_manager_addresses(self.config.vault_address)
 		position_managers = self.position_manager_repository.get_position_managers(position_manager_addresses)
-
+		
 		equation_solver = EquationsSolver(vault, position_managers)
 		equation_result = equation_solver.calculate_equations()
+		rebalance_data = self.rebalance_executor.generate_request_payload(position_managers, equation_result)
+		print("Rebalance Data")
+		print(rebalance_data)
+		should_rebalance, error_message = self.rebalance_executor.should_execute(rebalance_data)
+
+		print("should I rebalance?")
+		print(should_rebalance)
+
+		if not should_rebalance:
+			print("Rebalance did not happen. Error message: {}".format(error_message))
+			return
+		
 		print("Equation result was {}".format(equation_result))
-		tx = self.rebalance_executor.execute_rebalance(equation_result, position_managers)
+		tx = self.rebalance_executor.execute_rebalance(rebalance_data)
 		print("Successfully rebalanced!")
 		print("tx: {}".format(tx))
-		
-		
+

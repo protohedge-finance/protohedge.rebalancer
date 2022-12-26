@@ -1,13 +1,14 @@
 
-FROM public.ecr.aws/lambda/python:3.9
+FROM python:3.10
+
+WORKDIR /app
 
 COPY requirements.txt  .
-RUN  pip3 install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
+RUN pip3 install -r requirements.txt
 
 # Copy function code
-COPY . ${LAMBDA_TASK_ROOT}
+COPY . ./
 
-# Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
-CMD [ "rebalance.rebalance" ]
+CMD [ "python3", "main.py" ]
 
 
