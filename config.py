@@ -8,3 +8,5 @@ class Config:
         self.rpc_url: str = os.getenv("RPC_URL")
         self.redis_host: str = os.getenv("REDIS_HOST")
         self.redis_port: int = int(os.getenv("REDIS_PORT"))
+        self.redis_password: str = os.getenv("REDIS_PASSWORD")
+        self.redis_ssl: bool = bool(os.getenv("REDIS_SSL"))

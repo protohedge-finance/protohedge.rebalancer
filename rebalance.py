@@ -15,7 +15,7 @@ def rebalance(event, context):
 
     config = Config()
     w3 = web3.Web3(web3.HTTPProvider(config.rpc_url))
-    redis = Redis(host=config.redis_host, port=config.redis_port, db=0)
+    redis = Redis(host=config.redis_host, port=config.redis_port, password=config.redis_password, ssl=config.redis_ssl, db=0)
     vault_repository = VaultRepository(w3, config)
     position_manager_repository = PositionManagerRepository(w3)
     user_repository = UserRepository(w3)
