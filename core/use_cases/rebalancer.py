@@ -31,13 +31,12 @@ class Rebalancer:
 
 		if not should_rebalance:
 			outcome = "Rebalance did not happen. Error message: {}".format(error_message)
-			self.stats_repository.add_rebalance_outcome(outcome)			
+			self.stats_repository.add_rebalance_history(self.config.vault_address, outcome)			
 			return
 
 		print("Equation result was {}".format(equation_result))
 		tx = self.rebalance_executor.execute_rebalance(rebalance_data)
 		outcome = "Successfully rebalanced!"
-		print(outcome)
-		self.stats_repository.add_rebalance_outcome(outcome)
+		self.stats_repository.add_rebalance_history(self.config.vault_address, outcome)
 		print("tx: {}".format(tx))
 

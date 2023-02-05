@@ -8,6 +8,6 @@ class StatsRepository:
 	
 	def add_rebalance_history(self, address: str, note: str):
 		timestamp = int(datetime.utcnow().timestamp()*1e3)
-		record = "{}:{}:{}" .format(address, timestamp, note)
+		record = "{}:{}:{}" .format((address.lower()), timestamp, note)
 		self.redis.zadd("rebalance_history", { record: 0 })
 		
