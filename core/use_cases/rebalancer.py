@@ -30,6 +30,7 @@ class Rebalancer:
 		print(should_rebalance)
 
 		if not should_rebalance:
+			print("Error message: {}".format(error_message));
 			outcome = "Rebalance did not happen. Error message: {}".format(error_message)
 			self.stats_repository.add_rebalance_history(self.config.vault_address, outcome)			
 			return

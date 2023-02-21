@@ -1,3 +1,4 @@
+import os
 from dotenv import load_dotenv
 from redis import Redis
 import web3
@@ -11,7 +12,10 @@ from adapters.smart_contracts.repositories.position_manager_repository import Po
 
 
 def rebalance(event, context):
-    load_dotenv()
+    env_file = os.getenv("ENV_FILE") 
+    env_file = ".env.{}".format(env_file) if env_file else ".env"
+    
+    load_dotenv(dotenv_path=env_file)
 
     config = Config()
     w3 = web3.Web3(web3.HTTPProvider(config.rpc_url))
