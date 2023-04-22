@@ -15,6 +15,7 @@ class VaultRepository:
 		self.config: Config = config
 
 	def get_vault(self, vault_address: str):
+		print("Vault address is: ", vault_address)
 		vault_contract = self.w3.eth.contract(address=vault_address, abi=vault_abi)
 		name = vault_contract.functions.vaultName().call()
 		worth = vault_contract.functions.vaultWorth().call()
@@ -31,7 +32,7 @@ class VaultRepository:
 	
 	def rebalance(self, vault_address: str, request_payload: list[RebalanceQueueData], nonce: int):
 		vault_contract = self.w3.eth.contract(address=vault_address, abi=vault_abi)
-		tx = vault_contract.functions.rebalance(request_payload).build_transaction({"nonce": nonce})
+		tx = vault_contract.functions.rebalance(request_payload).build_transaction({"nonce": nonce, "from": self.config.user_address})
 		signed = self.w3.eth.account.sign_transaction(tx, private_key=self.config.private_key)
 		self.w3.eth.send_raw_transaction(signed.rawTransaction)
 		return tx

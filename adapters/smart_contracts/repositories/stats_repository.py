@@ -6,8 +6,8 @@ class StatsRepository:
 	def __init__(self, redis: Redis):
 		self.redis: Redis = redis	
 	
-	def add_rebalance_history(self, address: str, note: str):
+	def add_rebalance_note(self, address: str, note: str):
 		timestamp = int(datetime.utcnow().timestamp()*1e3)
 		record = "{}:{}:{}" .format((address.lower()), timestamp, note)
-		self.redis.zadd("rebalance_history", { record: 0 })
+		self.redis.zadd("vault_notes", { record: 0 })
 		
